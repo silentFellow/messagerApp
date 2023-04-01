@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Foundation:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Passion+One&family=Space+Grotesk&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Space Grotesk', sans-serif;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.menu_gradient {
+  background: linear-gradient(180deg, hsla(347, 89%, 61%, 1) 0%, hsla(242, 42%, 40%, 1) 100%);
+}
