@@ -17,3 +17,7 @@
 .menu_gradient {
   background: linear-gradient(180deg, hsla(347, 89%, 61%, 1) 0%, hsla(242, 42%, 40%, 1) 100%);
 }
+
+.nav_gradient {
+  background: linear-gradient(90deg, hsla(356, 76%, 50%, 1) 0%, hsla(14, 63%, 36%, 1) 100%);
+}

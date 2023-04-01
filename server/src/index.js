@@ -58,4 +58,4 @@ app.get('/', (req, res) => console.log('hi'))
 app.use('/msg', messageRouter)
 
 // listener
-app.listen(PORT, () => console.log(`app started at http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`app started at https://messagerapp.onrender.com`))

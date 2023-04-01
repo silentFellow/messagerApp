@@ -50,7 +50,7 @@ const SignUp = () => {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-smoke">
-      <div className='flex flex-col justify-center items-center h-screen w-screen md:h-[90%] md:w-[90%] xl:h-[80%] xl:w-[80%] bg-light shadow-sm shadow-char'>
+      <div className='flex flex-col justify-center items-center h-screen w-screen mb-0 md:h-[90%] md:w-[90%] xl:h-[80%] xl:w-[80%] bg-light shadow-sm sm:shadow-char'>
         
         <img src={logoDark} alt="logo" className='h-[6%] w-[33%] sm:h-[9%] sm:w-[24%] xl:h-[12%] xl:w-[15%]' />
         

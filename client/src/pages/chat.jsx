@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { Navbar, Sidebar, Chatplace } from '../components/'
 import { AiOutlineSend } from 'react-icons/ai'
 import { authContext } from '../contexts/users'
 import axios from '../api/useAxios'
 import Pusher from 'pusher-js'
-import { useNavigate } from 'react-router-dom'
+import { redirect} from 'react-router-dom'
 
 const Chats = () => {
 
@@ -15,13 +15,11 @@ const Chats = () => {
   const [mess, setMess] = useState([])
   const username = userName?.displayName
   const lastMessage = useRef();
-  const navigate = useNavigate()
+  const [activeUser, setActiveUser] = useState(userName?.displayName)
 
-  useEffect(() => {
-    if(!userName) {
-      navigate('/login')
-    }
-  }, [])
+  useLayoutEffect(() => {
+    setMess([])
+  }, [transmissionId])
 
   const currentTime = () => {
     let date = new Date().getDate()
@@ -114,13 +112,13 @@ const Chats = () => {
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-smoke">
       
-      <div className="h-[96%] w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light shadow-xl shadow-ascent">
+      <div className="h-[96%] w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light mb-0 shadow-xl sm:shadow-ascent">
         <div className="h-[8%] md:h-[9%] w-full">
-          <Navbar username={mess} toggle={toggle} setToggle={setToggle} />
+          <Navbar username={mess} toggle={toggle} setToggle={setToggle} activeUser={activeUser} />
         </div>
         <div className="h-[91%] w-full flex">
           <div className={`${!toggle ? "h-full w-screen md:w-[30%] flex flex-col justify-center items-center bg-smoke overflow-scroll px-3" : "hidden h-full w-[30%] md:flex flex-col justify-center items-center bg-smoke overflow-scroll px-3"}`}>
-            <Sidebar toggle={toggle} setToggle={setToggle} active={active} setActive={setActive} setTransmissionId={setTransmissionId} />
+            <Sidebar toggle={toggle} setToggle={setToggle} active={active} setActive={setActive} setTransmissionId={setTransmissionId} setActiveUser={setActiveUser} />
           </div>
           <div className={`${toggle ? "flex flex-col w-screen md:w-[70%] border-l-2" : "hidden md:flex flex-col w-[70%] border-l-2"}`}>
             <div className="h-[93%] overflow-scroll m-2 mx-3">

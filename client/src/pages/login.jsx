@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { logoDark } from '../assets/'
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom'
@@ -18,6 +18,12 @@ const Login = () => {
   const { updateName } = authContext();
   const { userName } = authContext();
   const navigate = useNavigate()
+
+  useLayoutEffect(() => {
+    if(userName) {
+      navigate('/chats')
+    }
+  })
 
   const reset = () => {
     username.current.value = ''
@@ -67,7 +73,7 @@ const Login = () => {
 
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-smoke">
-      <div className='flex flex-col justify-center items-center h-screen w-screen sm:h-[90%] sm:w-[90%] xl:h-[80%] xl:w-[80%] bg-light shadow-sm shadow-char'>
+      <div className='flex flex-col justify-center items-center h-screen w-screen mb-0 sm:h-[90%] sm:w-[90%] xl:h-[80%] xl:w-[80%] bg-light shadow-sm sm:shadow-char'>
         
         <img src={logoDark} alt="logo" className='h-[6%] w-[33%] md:h-[9%] md:w-[24%] xl:h-[12%] xl:w-[15%]' />
         

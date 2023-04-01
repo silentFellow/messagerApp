@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import { storage } from '../firebase'
 import { uploadBytes, getDownloadURL, ref } from 'firebase/storage'
 import { db } from '../firebase'
-import { doc, updateDoc } from '@firebase/firestore'
+import { doc, updateDoc, setDoc } from '@firebase/firestore'
+import { uid } from 'uid'
 
-const Navbar = ({ toggle, setToggle }) => {
+const Navbar = ({ toggle, setToggle, activeUser }) => {
 
   const { userName } = authContext()
   const { updateName } = authContext()
@@ -75,6 +76,32 @@ const Navbar = ({ toggle, setToggle }) => {
     }
   }
 
+  const createRoom = async (e) => {
+    if(e.code != 'Enter') {
+      return
+    }
+    if(e.code == 'Enter') {
+      if(newRoomRef.current.value == '') {
+        return
+      }
+      try {
+        const uidRoom = uid(45)
+        const room = doc(db, 'rooms', uidRoom)
+        await setDoc(room, {
+          name: newRoomRef.current.value,
+          photoURL: '',
+          transmissionId: uidRoom
+        })
+        newRoomRef.current.value = ''
+        setNewRoom(false)
+        setMenu(false)
+      }
+      catch(error) {
+        console.log(error)
+      }
+    }
+  }
+
   return (
     <div className="h-full w-full flex flex-row items-center justify-between">
         <div className={`${!toggle ? "flex w-screen md:w-[30%] bg-ascent justify-between h-full items-center p-3 px-4 relative" : "hidden md:flex w-[30%] bg-ascent justify-between h-full items-center p-3 px-4 relative"}`}>
@@ -99,6 +126,7 @@ const Navbar = ({ toggle, setToggle }) => {
                 placeholder='Enter Room Name'
                 className='w-full px-2 rounded-md bg-light text-dark placeholder:text-[14px] mb-2'
                 ref={newRoomRef}
+                onKeyDown={createRoom}
               />
             </div>
 
@@ -149,12 +177,14 @@ const Navbar = ({ toggle, setToggle }) => {
             >Sign Out</p>
           </div>
         </div>
-        <div className={`${toggle ? "flex w-screen md:w-[70%] bg-dark text-light jsutify-start gap-6 h-full items-center p-4 pr-2" : "hidden md:flex w-[70%] bg-dark text-light jsutify-start gap-6 h-full items-center p-4 pr-2"}`}>
+        <div className={`${toggle ? "flex w-screen md:w-[70%] nav_gradient text-light jsutify-start gap-6 h-full items-center p-4 pr-2" : "hidden md:flex w-[70%] nav_gradient text-light jsutify-start gap-6 h-full items-center p-4 pr-2"}`}>
             <BiArrowBack 
               className='flex md:hidden cursor-pointer'
              onClick={() => setToggle(!toggle)}
             />
-            <h2>Chat with ME.........</h2>
+            <h2>
+              Chat with <span className="text-ascent font-cursive">{activeUser}</span> ..........
+            </h2>
         </div>
     </div>
   )
