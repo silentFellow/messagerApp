@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { logoDark } from '../assets/index'
 
 const Home = () => {
   const navigate = useNavigate()
-  setTimeout(() => {
-    navigate('/chats')
-  }, 3000)
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      navigate('/chats')
+    }, 3600)
+  })
   return (
     <div className="h-screen w-screen md:flex flex-col justify-center items-center bg-smoke">
       <div className="hidden md:flex flex-col justify-center items-center h-[90%] w-[90%]">

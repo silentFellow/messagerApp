@@ -15,15 +15,15 @@ const Login = () => {
 
   const { signInGoogle } = authContext();
   const { signInEmail } = authContext();
-  const { updateName } = authContext();
   const { userName } = authContext();
+  const { updateName } = authContext();
   const navigate = useNavigate()
 
   useLayoutEffect(() => {
     if(userName) {
       navigate('/chats')
     }
-  })
+  }, [])
 
   const reset = () => {
     username.current.value = ''
@@ -34,6 +34,11 @@ const Login = () => {
     try {
       setMessage('')
       await signInGoogle();
+      if(userName?.displayName == null) {
+        const index = userName.email.indexof('@');
+        const word = userName.email.slice(0, index);
+        await updateName(word);
+      }
       const userCollection = doc(db, 'users', userName?.uid)
       await setDoc(userCollection, {
         userName: userName?.displayName,
@@ -53,9 +58,9 @@ const Login = () => {
       setMessage('')
       await signInEmail(`${username.current.value}@gmail.com`, pass.current.value)
       if(userName?.displayName == null) {
-        await updateName(username?.current.value)
+        await updateName(username.current.value)
       }
-      const userCollection = doc(db, 'users', userName.uid)
+      const userCollection = doc(db, 'users', userName?.uid)
       await setDoc(userCollection, {
         userName: userName?.displayName,
         uid: userName?.uid,
@@ -85,7 +90,7 @@ const Login = () => {
           <input 
             type="text" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
-            placeholder='ENTER YOUR USERNAME' 
+            placeholder='Enter your id' 
             ref={username}
           />
         </div>
@@ -93,12 +98,12 @@ const Login = () => {
           <input 
             type="password" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
-            placeholder='ENTER YOUR PASSWORD' 
+            placeholder='Enter id password' 
             ref={pass}
           />
         </div>
 
-        <div className="flex flex-row justify-evenly items-center w-[54%] md:w-1/3 xl:w-1/4">
+        <div className="mt-[2%] sm:mt-0 flex flex-row justify-evenly items-center w-[54%] md:w-1/3 xl:w-1/4">
           <button type='button' className='bg-dark text-light p-1.5 rounded-xl transition-all duration-500 mt-2 xl:mt-0 hover:opacity-75'
             onClick={() => login()}
           >

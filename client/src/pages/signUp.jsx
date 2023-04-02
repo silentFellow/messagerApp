@@ -54,7 +54,7 @@ const SignUp = () => {
         
         <img src={logoDark} alt="logo" className='h-[6%] w-[33%] sm:h-[9%] sm:w-[24%] xl:h-[12%] xl:w-[15%]' />
         
-        <div className={`${message == '' ? 'hidden' : "h-[5%] w-1/2 md:w-1/3 xl:h-[6%] xl:w-1/4 flex justify-center items-center bg-ascent text-white mb-2 rounded-xl"}`}>
+        <div className={`${message == '' ? 'hidden' : "text-[12px] h-[5%] w-1/2 md:w-1/3 xl:h-[6%] xl:w-1/4 flex justify-center items-center bg-ascent text-white mb-2 rounded-xl"}`}>
           {message}
         </div>
         
@@ -66,7 +66,7 @@ const SignUp = () => {
             ref={username}
           />
         </div>
-        <div className="h-[5%] w-[54%] mt-3 md:h-[7%] md:w-1/3 xl:mt-0 xl:h-[9%] xl:w-1/4">
+        <div className="h-[5%] w-[54%] mt-[3.6%] sm:mt-0 md:h-[7%] md:w-1/3 xl:mt-0 xl:h-[9%] xl:w-1/4">
           <input 
             type="password" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
@@ -74,7 +74,7 @@ const SignUp = () => {
             ref={pass}
           />
         </div>
-        <div className="h-[5%] w-[54%] mt-3 md:h-[7%] md:w-1/3 xl:mt-0 xl:h-[9%] xl:w-1/4">
+        <div className="h-[5%] w-[54%] mt-[3.6%] sm:mt-0 md:h-[7%] md:w-1/3 xl:mt-0 xl:h-[9%] xl:w-1/4">
           <input 
             type="password" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
@@ -83,7 +83,7 @@ const SignUp = () => {
           />
         </div>
 
-        <div className="flex flex-row justify-evenly items-center w-[54%] md:w-1/3 xl:w-1/4">
+        <div className="mt-[2%] sm:mt-0 flex flex-row justify-evenly items-center w-[54%] md:w-1/3 xl:w-1/4">
           <button type='button' className='bg-dark text-light p-1.5 rounded-xl transition-all duration-500 mt-2 xl:mt-0 hover:opacity-75'
             onClick={() => create()}
             disabled={loading}
@@ -98,7 +98,7 @@ const SignUp = () => {
           </button>
         </div>
 
-        <div className="flex justify-center items-center w-[54%] mt-3 font-extrabold text-[12px] md:w-1/3 sm:text-[14px] xl:w-1/4 xl:text-[16px]">
+        <div className="flex justify-center items-center w-[54%] mt-[3%] sm:mt-[1%] font-extrabold text-[12px] md:w-1/3 sm:text-[14px] xl:w-1/4 xl:text-[16px]">
           Don't have an account ?<Link to='/login' className='text-ascent cursor-pointer'>&nbsp;login</Link>
         </div>
 

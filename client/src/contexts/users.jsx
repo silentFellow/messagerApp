@@ -25,7 +25,7 @@ const UserProvider = ({ children }) => {
   
   const updateName = (dname) =>  updateProfile(userName, {displayName : dname})
   
-  const updatePhoto = (url) => updateProfile(userName, { photoURL: url})
+  const updatePhoto = (url) => updateProfile(userName, {photoURL: url})
 
   const signout = () => signOut(auth);
 

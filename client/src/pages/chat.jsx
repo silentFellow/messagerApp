@@ -4,7 +4,6 @@ import { AiOutlineSend } from 'react-icons/ai'
 import { authContext } from '../contexts/users'
 import axios from '../api/useAxios'
 import Pusher from 'pusher-js'
-import { redirect} from 'react-router-dom'
 
 const Chats = () => {
 
@@ -88,6 +87,7 @@ const Chats = () => {
     }
     receiveMsg()
   }, [transmissionId])
+  console.log(userName)
 
   useEffect(() => {
     const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
@@ -112,9 +112,9 @@ const Chats = () => {
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-smoke">
       
-      <div className="h-[96%] w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light mb-0 shadow-xl sm:shadow-ascent">
+      <div className="mt-[1.8px] mb-[1.8px] h-[96%] w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light sm:shadow-xl sm:shadow-ascent">
         <div className="h-[8%] md:h-[9%] w-full">
-          <Navbar username={mess} toggle={toggle} setToggle={setToggle} activeUser={activeUser} />
+          <Navbar className='sticky top-0' username={mess} toggle={toggle} setToggle={setToggle} activeUser={activeUser} />
         </div>
         <div className="h-[91%] w-full flex">
           <div className={`${!toggle ? "h-full w-screen md:w-[30%] flex flex-col justify-center items-center bg-smoke overflow-scroll px-3" : "hidden h-full w-[30%] md:flex flex-col justify-center items-center bg-smoke overflow-scroll px-3"}`}>
@@ -126,7 +126,7 @@ const Chats = () => {
               <div className="lastMessage" ref={lastMessage}></div>
             </div>
 
-            <div className="flex justify-between items-center bg-smoke h-[16%] sm:h-[14%] text-char w-full pl-1 tracking-wider mt-1">
+            <div className="sticky bottom-0 flex justify-between items-center bg-smoke h-[16%] sm:h-[14%] text-char w-full pl-1 tracking-wider mt-1">
               <textarea type="text" 
                 className='h-[78%] text-ascent py-1 pl-3 w-[96%] font-bold outline-none overflow-scroll rounded-xl placeholder:text-ascent'
                 placeholder='Enter the message here' 
