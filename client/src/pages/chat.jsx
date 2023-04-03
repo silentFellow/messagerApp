@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Navbar, Sidebar, Chatplace } from '../components/'
 import { AiOutlineSend } from 'react-icons/ai'
 import { authContext } from '../contexts/users'
@@ -9,16 +9,12 @@ const Chats = () => {
 
   const { userName } = authContext()
   const [message, setMessage] = useState("")
-  const [active, setActive] = useState('')
-  const [transmissionId, setTransmissionId] = useState('')
+  const [active, setActive] = useState(userName?.uid)
+  const [transmissionId, setTransmissionId] = useState(userName?.uid)
   const [mess, setMess] = useState([])
   const username = userName?.displayName
   const lastMessage = useRef();
   const [activeUser, setActiveUser] = useState(userName?.displayName)
-
-  useLayoutEffect(() => {
-    setMess([])
-  }, [transmissionId])
 
   const currentTime = () => {
     let date = new Date().getDate()
@@ -75,7 +71,7 @@ const Chats = () => {
       try {
         const res = await axios.get('/msg/receive', {
           params: {
-            transmissionId: transmissionId
+            'transmissionId': transmissionId
           }
         })
         setMess(res.data)
@@ -87,7 +83,6 @@ const Chats = () => {
     }
     receiveMsg()
   }, [transmissionId])
-  console.log(userName)
 
   useEffect(() => {
     const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {

@@ -34,6 +34,9 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       return
     }
     if(e.code == 'Enter') {
+      setNameuser(false)
+      setNewIcon(false)
+      setMenu(false)
       if(changeName.current.value == '') {
         changeName.current.value = uname;
       }
@@ -45,8 +48,7 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
         userName: new_name
       })
       changeName.current.value = ''
-      setNameuser(false)
-      setMenu(false)
+      console.log(userName)
     }
     changeName.current.value = ''
   }
@@ -58,6 +60,9 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
     else {
       const imageRef = ref(storage, `profileIcons/${userName.uid}`)
       try {
+        setNameuser(false)
+        setNewIcon(false)
+        setMenu(false)
         await uploadBytes(imageRef, profileIcon)
         const logo = await getDownloadURL(imageRef)
         await updatePhoto(logo)
@@ -85,6 +90,9 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
         return
       }
       try {
+        setNameuser(false)
+        setNewIcon(false)
+        setMenu(false)
         const uidRoom = uid(45)
         const room = doc(db, 'rooms', uidRoom)
         await setDoc(room, {

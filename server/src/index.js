@@ -47,8 +47,8 @@ db.once('open', () => {
       })
       console.log(messageDetails)
     }
-    else if(error) {
-      console.log(error)
+    else if(err) {
+      console.log(err)
     }
   })
 })

@@ -35,8 +35,8 @@ const Login = () => {
       setMessage('')
       await signInGoogle();
       if(userName?.displayName == null) {
-        const index = userName.email.indexof('@');
-        const word = userName.email.slice(0, index);
+        const index = userName?.email.indexof('@');
+        const word = userName?.email.slice(0, index);
         await updateName(word);
       }
       const userCollection = doc(db, 'users', userName?.uid)
