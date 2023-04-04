@@ -18,11 +18,9 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
 
   const navigate = useNavigate()
 
-  const [uname, setUname] = useState(userName?.displayName);
   const [profileIcon, setProfileIcon] = useState('');
   const changeName = useRef()
   const newRoomRef = useRef()
-  const first = uname?.charAt(0).toUpperCase()
   const [menu,setMenu] = useState(false)
   const [nameuser, setNameuser] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
@@ -34,23 +32,36 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       return
     }
     if(e.code == 'Enter') {
+      if(changeName.current.value == '') {
+        return
+      }
+      const new_name = changeName.current.value
+      changeName.current.value = ''
       setNameuser(false)
       setNewIcon(false)
       setMenu(false)
-      if(changeName.current.value == '') {
-        changeName.current.value = uname;
-      }
-      const new_name = changeName.current.value
       await updateName(new_name)
-      setUname(new_name)
       const updated = doc(db, 'users', userName.uid)
       await updateDoc(updated, {
         userName: new_name
       })
-      changeName.current.value = ''
-      console.log(userName)
     }
+  }
+
+  const updateNameMob = async () => {
+    if(changeName.current.value == '') {
+      return
+    }
+    const new_name = changeName.current.value
     changeName.current.value = ''
+    setNameuser(false)
+    setNewIcon(false)
+    setMenu(false)
+    await updateName(new_name)
+    const updated = doc(db, 'users', userName.uid)
+    await updateDoc(updated, {
+      userName: new_name
+    })
   }
 
   const updateIcon = async () => {
@@ -71,9 +82,6 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
           photoURL: logo
         })
         setProfileIcon('')
-        setNewIcon(false)
-        setMenu(false)
-        setNameuser(false)
       }
       catch(error) {
         console.log(error)
@@ -90,23 +98,47 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
         return
       }
       try {
-        setNameuser(false)
-        setNewIcon(false)
-        setMenu(false)
         const uidRoom = uid(45)
         const room = doc(db, 'rooms', uidRoom)
+        const room_name = newRoomRef.current.value
+        newRoomRef.current.value = ''
+        setNameuser(false)
+        setNewRoom(false)
+        setNewIcon(false)
+        setMenu(false)
         await setDoc(room, {
-          name: newRoomRef.current.value,
+          name: room_name,
           photoURL: '',
           transmissionId: uidRoom
         })
-        newRoomRef.current.value = ''
-        setNewRoom(false)
-        setMenu(false)
       }
       catch(error) {
         console.log(error)
       }
+    }
+  }
+
+  const createRoomMob = async () => {
+    if(newRoomRef.current.value == '') {
+      return
+    }
+    try {
+      const uidRoom = uid(45)
+      const room = doc(db, 'rooms', uidRoom)
+      const room_name = newRoomRef.current.value
+      newRoomRef.current.value = ''
+      setNameuser(false)
+      setNewRoom(false)
+      setNewIcon(false)
+      setMenu(false)
+      await setDoc(room, {
+        name: room_name,
+        photoURL: '',
+        transmissionId: uidRoom
+      })
+    }
+    catch(error) {
+      console.log(error)
     }
   }
 
@@ -119,46 +151,58 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
           <span className="h-[36px] w-[36px] bg-light text-dark font-black rounded-full flex justify-center items-center cursor-pointer"
             onClick={() => setMenu(!menu)}
           >
-            {userName?.photoURL == null || '' ? first : 
+            {userName?.photoURL == null || '' ? userName?.displayName.charAt(0).toUpperCase() : 
               <img src={userName.photoURL} alt='missing' className='h-full w-full rounded-full' />
             }
           </span>
           <div className={`${menu ? `flex ${menuShow}` : 'hidden ${menuShow'}`}>
             <p className='mt-2 mb-3 cursor-pointer'
-              onClick={() => setNewRoom(!newRoom)}
+              onClick={() => {
+                setNameuser(false)
+                setNewIcon(false)
+                setNewRoom(!newRoom)
+              }}
             >Create Room</p>
 
             <div className={`${newRoom ? 'flex flex-col' : 'hidden'}`}>
-              <input 
-                type='text'
-                placeholder='Enter Room Name'
-                className='w-full px-2 rounded-md bg-light text-dark placeholder:text-[14px] mb-2'
-                ref={newRoomRef}
-                onKeyDown={createRoom}
-              />
+              <div className="flex">
+                <input 
+                  type='text'
+                  placeholder='Enter Room Name'
+                  className='w-full px-2 rounded-md bg-light text-dark placeholder:text-[14px] mb-2'
+                  ref={newRoomRef}
+                  onKeyDown={createRoom}
+                />
+                <button className='text-ascent w-[25%] flex justify-center md:hidden' onClick={() => createRoomMob()}>&#10004;</button>
+              </div>
             </div>
 
             <p className='mb-3 cursor-pointer'
               onClick={() => {
                 setNewIcon(false)
+                setNewRoom(false)
                 setNameuser(!nameuser)
               }}
             >Update Name</p>
 
             <div className={`${nameuser ? 'flex flex-col' : 'hidden'}`}>
-              <input 
-                type='text'
-                placeholder='Enter new display Name'
-                className='w-full px-2 rounded-md mb-1 bg-light text-dark placeholder:text-[14px]'
-                ref={changeName}
-                onKeyDown={updatename}
-              />
+              <div className="flex">
+                <input 
+                  type='text'
+                  placeholder='Enter new display Name'
+                  className='w-full px-2 rounded-md mb-1 bg-light text-dark placeholder:text-[14px]'
+                  ref={changeName}
+                  onKeyDown={updatename}
+                />
+                <button className='text-ascent w-[25%] flex justify-center md:hidden' onClick={() => updateNameMob()}>&#10004;</button>
+              </div>
               <p className="text-ascent mb-2">NOTE: This not change your ID name</p>
             </div>
 
             <p className='mb-3 cursor-pointer'
               onClick={() => {
                 setNameuser(false)
+                setNewRoom(false)
                 setNewIcon(!newIcon)
               }}
             >Update Icon</p>

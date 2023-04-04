@@ -107,7 +107,7 @@ const Chats = () => {
   return (
     <div className="h-screen w-screen flex justify-center items-center bg-smoke">
       
-      <div className="mt-[1.8px] mb-[1.8px] h-[96%] w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light sm:shadow-xl sm:shadow-ascent">
+      <div className="h-full w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light sm:shadow-xl sm:shadow-ascent">
         <div className="h-[8%] md:h-[9%] w-full">
           <Navbar className='sticky top-0' username={mess} toggle={toggle} setToggle={setToggle} activeUser={activeUser} />
         </div>

@@ -8,6 +8,7 @@ import { authContext } from '../contexts/users'
 const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setActiveUser }) => {
   const [users, setusers] = useState([])
   const [rooms, setRooms] = useState([])
+  const [search, setSearch] = useState('');
   const userCollection = collection(db, 'users')
   const roomCollection = collection(db, 'rooms')
   const { userName } = authContext()
@@ -42,7 +43,8 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
           <input 
             type="search"
             className='bg-white w-full p-4 border-y-[1px] border-char'
-            placeholder='LOOK FOR...'
+            placeholder='LOOK FOR...' 
+            onChange={(e) => setSearch(e.target.value)}
           />
           <div className="bg-white flex justify-center items-center p-4 border-y-[1px] border-l-[1px] border-char cursor-pointer">
             <AiOutlineSearch />
@@ -53,24 +55,47 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
 
         <div className="flex flex-col mt-7 gap-2">
           <h2 className='font-black'>USERS: </h2>
-          {users.map((user) => <div onClick={() => {
-            setActive(user.uid)
-            setActiveUser(user.userName)
-            if(user.uid > userName.uid) {
-              setTransmissionId(user.uid + userName.uid)
-            }
-            else {
-              setTransmissionId(userName.uid + user.uid)
-            }
-          }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )}
+          {
+            search == '' || search == null ? 
+            users.map((user) => <div onClick={() => {
+              setActive(user.uid)
+              setActiveUser(user.userName)
+              if(user.uid > userName.uid) {
+                setTransmissionId(user.uid + userName.uid)
+              }
+              else {
+                setTransmissionId(userName.uid + user.uid)
+              }
+            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            :
+            users.filter(user => user.userName?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div onClick={() => {
+              setActive(user.uid)
+              setActiveUser(user.userName)
+              if(user.uid > userName.uid) {
+                setTransmissionId(user.uid + userName.uid)
+              }
+              else {
+                setTransmissionId(userName.uid + user.uid)
+              }
+            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+          }
 
           <h2 className="font-black mt-2 pt-2 border-t-2 border-dark">ROOMS: </h2>
-          {rooms.map((user) => <div onClick={() => {
-            setActive(user.transmissionId)
-            setActiveUser(user.name)
-            setTransmissionId(user.transmissionId)
-            console.log(user)
-          }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )}
+          {search == '' || search == null ? 
+            rooms.map((user) => <div onClick={() => {
+              setActive(user.transmissionId)
+              setActiveUser(user.name)
+              setTransmissionId(user.transmissionId)
+              console.log(user)
+            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            :
+            rooms.filter(room => room.name?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div onClick={() => {
+              setActive(user.transmissionId)
+              setActiveUser(user.name)
+              setTransmissionId(user.transmissionId)
+              console.log(user)
+            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+          }
         </div>
       </div>
   )
