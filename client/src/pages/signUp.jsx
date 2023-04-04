@@ -70,7 +70,7 @@ const SignUp = () => {
           <input 
             type="password" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
-            placeholder='ENTER YOUR PASSWORD' 
+            placeholder='Enter id password' 
             ref={pass}
           />
         </div>
@@ -78,7 +78,7 @@ const SignUp = () => {
           <input 
             type="password" 
             className='w-full p-1 px-3 rounded-xl bg-smoke border-ascent focus:border-[2px]' 
-            placeholder='ENTER CONFIRM PASSWORD' 
+            placeholder='Enter confirm id password' 
             ref={cPass}
           />
         </div>
