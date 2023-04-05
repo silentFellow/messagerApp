@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useTransition } from 'react'
 import { logoDark } from '../assets/'
 import { authContext } from '../contexts/users'
 import { BiArrowBack } from 'react-icons/bi'
@@ -25,9 +25,10 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
   const [nameuser, setNameuser] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
   const [newIcon, setNewIcon] = useState(false)
-  const menuShow = "menu_gradient flex-col text-light p-3 absolute right-[6%] top-[81%] rounded-xl font-black tracking-tight selection:bg-none"
+  const menuShow = "menu_gradient flex-col text-light p-3 absolute right-[6%] top-[81%] rounded-xl font-black tracking-tight selection:bg-none z-10"
+  const [isPending, startTransition] = useTransition()
 
-  const updatename = async (e) => {
+  const updatename = (e) => {
     if(e.code != 'Enter') {
       return
     }
@@ -35,53 +36,56 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       if(changeName.current.value == '') {
         return
       }
-      const new_name = changeName.current.value
+      startTransition(async () => {
+        const new_name = changeName.current.value
+        await updateName(new_name)
+        await updateDoc(doc(db, 'users', userName.uid), {
+          userName: new_name
+        })
+      })
       changeName.current.value = ''
       setNameuser(false)
       setNewIcon(false)
       setMenu(false)
-      await updateName(new_name)
-      const updated = doc(db, 'users', userName.uid)
-      await updateDoc(updated, {
-        userName: new_name
-      })
     }
   }
 
-  const updateNameMob = async () => {
+  const updateNameMob = () => {
     if(changeName.current.value == '') {
       return
     }
-    const new_name = changeName.current.value
+    startTransition(async () => {
+      const new_name = changeName.current.value
+      await updateName(new_name)
+      await updateDoc(doc(db, 'users', userName.uid), {
+        userName: new_name
+      })
+    })
     changeName.current.value = ''
     setNameuser(false)
     setNewIcon(false)
     setMenu(false)
-    await updateName(new_name)
-    const updated = doc(db, 'users', userName.uid)
-    await updateDoc(updated, {
-      userName: new_name
-    })
   }
 
-  const updateIcon = async () => {
+  const updateIcon = () => {
     if(profileIcon == '') {
       return
     }
     else {
       const imageRef = ref(storage, `profileIcons/${userName.uid}`)
       try {
+        startTransition(async () => {
+          await uploadBytes(imageRef, profileIcon)
+          const logo = await getDownloadURL(imageRef)
+          await updatePhoto(logo)
+          await updateDoc(doc(db, 'users', userName.uid), {
+            photoURL: logo
+          })
+        })
+        setProfileIcon('')
         setNameuser(false)
         setNewIcon(false)
         setMenu(false)
-        await uploadBytes(imageRef, profileIcon)
-        const logo = await getDownloadURL(imageRef)
-        await updatePhoto(logo)
-        const updated = doc(db, 'users', userName.uid)
-        await updateDoc(updated, {
-          photoURL: logo
-        })
-        setProfileIcon('')
       }
       catch(error) {
         console.log(error)
@@ -89,7 +93,7 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
     }
   }
 
-  const createRoom = async (e) => {
+  const createRoom = (e) => {
     if(e.code != 'Enter') {
       return
     }
@@ -100,16 +104,18 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       try {
         const uidRoom = uid(45)
         const room_name = newRoomRef.current.value
+        startTransition(async () => {
+          await setDoc(doc(db, 'rooms', uidRoom), {
+            name: room_name,
+            photoURL: '',
+            transmissionId: uidRoom
+          })
+        })
         newRoomRef.current.value = ''
         setNameuser(false)
         setNewRoom(false)
         setNewIcon(false)
         setMenu(false)
-        await setDoc(doc(db, 'rooms', uidRoom), {
-          name: room_name,
-          photoURL: '',
-          transmissionId: uidRoom
-        })
       }
       catch(error) {
         console.log(error)
@@ -117,29 +123,30 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
     }
   }
 
-  const createRoomMob = async () => {
+  const createRoomMob = () => {
     if(newRoomRef.current.value == '') {
       return
     }
     try {
       const uidRoom = uid(45)
       const room_name = newRoomRef.current.value
+      startTransition(async () => {
+        await setDoc(doc(db, 'rooms', uidRoom), {
+          name: room_name,
+          photoURL: '',
+          transmissionId: uidRoom
+        })
+      })
       newRoomRef.current.value = ''
       setNameuser(false)
       setNewRoom(false)
       setNewIcon(false)
       setMenu(false)
-      await setDoc(doc(db, 'rooms', uidRoom), {
-        name: room_name,
-        photoURL: '',
-        transmissionId: uidRoom
-      })
     }
     catch(error) {
       console.log(error)
     }
   }
-  console.log(userName)
 
   return (
     <div className="h-full w-full flex flex-row items-center justify-between">

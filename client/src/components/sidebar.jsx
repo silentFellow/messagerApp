@@ -5,7 +5,7 @@ import { db } from '../firebase'
 import { getDocs, collection } from '@firebase/firestore'
 import { authContext } from '../contexts/users'
 
-const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setActiveUser }) => {
+const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setActiveUser, profUrl, setProfIcon, setProfUrl }) => {
   const [users, setusers] = useState([])
   const [rooms, setRooms] = useState([])
   const [search, setSearch] = useState('');
@@ -35,10 +35,11 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
 
     users()
     rooms()
-  }, [userCollection, roomCollection])
+  }, [users, rooms])
 
   return (  
-      <div className="h-[90%] flex flex-col w-full">
+      <div className="h-[90%] flex flex-col w-full relative">
+
         <div className="h-[4%] search w-full flex justify-between bg-smoke">
           <input 
             type="search"
@@ -66,7 +67,7 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
               else {
                 setTransmissionId(userName.uid + user.uid)
               }
-            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} setProfIcon={setProfIcon} setProfUrl={setProfUrl} /></div> )
             :
             users.filter(user => user.userName?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div key={user.uid} onClick={() => {
               setActive(user.uid)
@@ -77,7 +78,7 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
               else {
                 setTransmissionId(userName.uid + user.uid)
               }
-            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} setProfIcon={setProfIcon} setProfUrl={setProfUrl} /></div> )
           }
 
           <h2 className="font-black mt-2 pt-2 border-t-2 border-dark">ROOMS: </h2>
@@ -86,13 +87,13 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
               setActive(user.transmissionId)
               setActiveUser(user.name)
               setTransmissionId(user.transmissionId)
-            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} setProfIcon={setProfIcon} setProfUrl={setProfUrl} /></div> )
             :
             rooms.filter(room => room.name?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div key={user.transmissionId} onClick={() => {
               setActive(user.transmissionId)
               setActiveUser(user.name)
               setTransmissionId(user.transmissionId)
-            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
+            }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} setProfIcon={setProfIcon} setProfUrl={setProfUrl} /></div> )
           }
         </div>
       </div>

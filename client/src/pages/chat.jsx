@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,useTransition } from 'react'
+import React, { useState, useEffect, useRef, useTransition } from 'react'
 import { Navbar, Sidebar, Chatplace } from '../components/'
 import { AiOutlineSend } from 'react-icons/ai'
 import { authContext } from '../contexts/users'
@@ -15,6 +15,8 @@ const Chats = () => {
   const username = userName?.displayName
   const lastMessage = useRef();
   const [activeUser, setActiveUser] = useState(userName?.displayName)
+  const [profIcon, setProfIcon] = useState(false)
+  const [profUrl, setProfUrl] = useState('')
   const [isPending, startTransition] = useTransition()
 
   const currentTime = () => {
@@ -48,17 +50,19 @@ const Chats = () => {
     }
   }
 
-  const msgSend = async () => {
+  const msgSend = () => {
     if(message == '') {
       return
     }
     try {
-      await axios.post('/msg/send', {
-        'username': username,
-        'message': message,
-        'date': currentTime().currentDate,
-        'time': currentTime().currentTiming,
-        'transmissionId': transmissionId
+      startTransition(async () => {
+        await axios.post('/msg/send', {
+          'username': username,
+          'message': message,
+          'date': currentTime().currentDate,
+          'time': currentTime().currentTiming,
+          'transmissionId': transmissionId
+        })
       })
       setMessage('')
     }
@@ -96,17 +100,37 @@ const Chats = () => {
       lastMessage.current?.scrollIntoView()
     });
 
+    console.log('pusher rendered')
+
     return () => {
       channel.unbind_all();
       channel.unsubscribe();
     }
-    
+
   }, [mess])
 
   const [toggle, setToggle] = useState(false);
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center bg-smoke">
+    <div className="h-screen w-screen flex justify-center items-center bg-smoke z-0 relative">
+
+      {/* show profile icons */}
+
+      <div className={`${profIcon ? "h-full w-full md:h-[45%] md:w-[45%] flex md:justify-center md:items-center menu_gradient z-10 absolute md:left-[35%]" : 'hidden'}`}>
+        <div className="h-full w-full relative">
+          <span className="text-light p-1 bg-transparent rounded-full border-2 border-black absolute top-[24px] left-[20px] cursor-pointer"
+            onClick={() => {
+              setProfIcon(false)
+              setProfUrl('')
+            }}
+          >
+            X
+          </span>
+          <img src={profUrl} alt="missing" className='h-full w-full bg-cover' />
+        </div>
+      </div>
+
+      {/* normal chat container */}
       
       <div className="h-full w-[96%] md:h-[90%] md:w-[90%] flex flex-col bg-light sm:shadow-xl sm:shadow-ascent">
         <div className="h-[8%] md:h-[9%] w-full">
@@ -114,7 +138,7 @@ const Chats = () => {
         </div>
         <div className="h-[91%] w-full flex">
           <div className={`${!toggle ? "h-full w-screen md:w-[30%] flex flex-col justify-center items-center bg-smoke overflow-scroll px-3" : "hidden h-full w-[30%] md:flex flex-col justify-center items-center bg-smoke overflow-scroll px-3"}`}>
-            <Sidebar toggle={toggle} setToggle={setToggle} active={active} setActive={setActive} setTransmissionId={setTransmissionId} setActiveUser={setActiveUser} />
+            <Sidebar toggle={toggle} setToggle={setToggle} active={active} setActive={setActive} setTransmissionId={setTransmissionId} setActiveUser={setActiveUser} profUrl={profUrl} setProfIcon={setProfIcon} setProfUrl={setProfUrl} />
           </div>
           <div className={`${toggle ? "flex flex-col w-screen md:w-[70%] border-l-2" : "hidden md:flex flex-col w-[70%] border-l-2"}`}>
             <div className="h-[93%] overflow-scroll m-2 mx-3">
