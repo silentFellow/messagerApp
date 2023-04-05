@@ -18,8 +18,6 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
 
   const navigate = useNavigate()
 
-  const [currentUser, setCurrentUser] = useState(userName?.displayName)
-  const [currentPhoto, setCurrentPhoto] = useState(userName?.photoURL)
   const [profileIcon, setProfileIcon] = useState('');
   const changeName = useRef()
   const newRoomRef = useRef()
@@ -43,7 +41,6 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       setNewIcon(false)
       setMenu(false)
       await updateName(new_name)
-      setCurrentUser(new_name)
       const updated = doc(db, 'users', userName.uid)
       await updateDoc(updated, {
         userName: new_name
@@ -61,7 +58,6 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
     setNewIcon(false)
     setMenu(false)
     await updateName(new_name)
-    setCurrentUser(new_name)
     const updated = doc(db, 'users', userName.uid)
     await updateDoc(updated, {
       userName: new_name
@@ -81,7 +77,6 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
         await uploadBytes(imageRef, profileIcon)
         const logo = await getDownloadURL(imageRef)
         await updatePhoto(logo)
-        setCurrentPhoto(logo)
         const updated = doc(db, 'users', userName.uid)
         await updateDoc(updated, {
           photoURL: logo
@@ -104,14 +99,13 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       }
       try {
         const uidRoom = uid(45)
-        const room = doc(db, 'rooms', uidRoom)
         const room_name = newRoomRef.current.value
         newRoomRef.current.value = ''
         setNameuser(false)
         setNewRoom(false)
         setNewIcon(false)
         setMenu(false)
-        await setDoc(room, {
+        await setDoc(doc(db, 'rooms', uidRoom), {
           name: room_name,
           photoURL: '',
           transmissionId: uidRoom
@@ -129,14 +123,13 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
     }
     try {
       const uidRoom = uid(45)
-      const room = doc(db, 'rooms', uidRoom)
       const room_name = newRoomRef.current.value
       newRoomRef.current.value = ''
       setNameuser(false)
       setNewRoom(false)
       setNewIcon(false)
       setMenu(false)
-      await setDoc(room, {
+      await setDoc(doc(db, 'rooms', uidRoom), {
         name: room_name,
         photoURL: '',
         transmissionId: uidRoom
@@ -146,6 +139,7 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
       console.log(error)
     }
   }
+  console.log(userName)
 
   return (
     <div className="h-full w-full flex flex-row items-center justify-between">
@@ -156,8 +150,8 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
           <span className="h-[36px] w-[36px] bg-light text-dark font-black rounded-full flex justify-center items-center cursor-pointer"
             onClick={() => setMenu(!menu)}
           >
-            {userName?.photoURL == null || '' ? currentUser.charAt(0).toUpperCase() : 
-              <img src={currentPhoto} alt='missing' className='h-full w-full rounded-full' />
+            {userName?.photoURL == null || '' ? userName?.displayName.charAt(0).toUpperCase() : 
+              <img src={userName?.photoURL} alt='missing' className='h-full w-full rounded-full' />
             }
           </span>
           <div className={`${menu ? `flex ${menuShow}` : 'hidden ${menuShow'}`}>
@@ -229,7 +223,7 @@ const Navbar = ({ toggle, setToggle, activeUser }) => {
             <p className='mb-2 cursor-pointer'
               onClick={() => {
                 signout()
-                navigate('/')
+                navigate('/login')
               }}
             >Sign Out</p>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { logoDark } from '../assets/'
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useNavigate } from 'react-router-dom'
@@ -19,12 +19,6 @@ const Login = () => {
   const { updateName } = authContext();
   const navigate = useNavigate()
 
-  useLayoutEffect(() => {
-    if(userName) {
-      navigate('/chats')
-    }
-  }, [])
-
   const reset = () => {
     username.current.value = ''
     PassThrough.current.value = ''
@@ -34,13 +28,7 @@ const Login = () => {
     try {
       setMessage('')
       await signInGoogle();
-      if(userName?.displayName == null) {
-        const index = userName?.email.indexof('@');
-        const word = userName?.email.slice(0, index);
-        await updateName(word);
-      }
-      const userCollection = doc(db, 'users', userName?.uid)
-      await setDoc(userCollection, {
+      await setDoc(doc(db, 'users', userName?.uid), {
         userName: userName?.displayName,
         uid: userName?.uid,
         photoURL: userName?.photoURL
@@ -60,8 +48,7 @@ const Login = () => {
       if(userName?.displayName == null) {
         await updateName(username.current.value)
       }
-      const userCollection = doc(db, 'users', userName?.uid)
-      await setDoc(userCollection, {
+      await setDoc(doc(db, 'users', userName?.uid), {
         userName: userName?.displayName,
         uid: userName?.uid,
         photoURL: userName?.photoURL

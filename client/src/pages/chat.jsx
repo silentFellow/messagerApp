@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef,useTransition } from 'react'
 import { Navbar, Sidebar, Chatplace } from '../components/'
 import { AiOutlineSend } from 'react-icons/ai'
 import { authContext } from '../contexts/users'
@@ -15,6 +15,7 @@ const Chats = () => {
   const username = userName?.displayName
   const lastMessage = useRef();
   const [activeUser, setActiveUser] = useState(userName?.displayName)
+  const [isPending, startTransition] = useTransition()
 
   const currentTime = () => {
     let date = new Date().getDate()
@@ -117,7 +118,7 @@ const Chats = () => {
           </div>
           <div className={`${toggle ? "flex flex-col w-screen md:w-[70%] border-l-2" : "hidden md:flex flex-col w-[70%] border-l-2"}`}>
             <div className="h-[93%] overflow-scroll m-2 mx-3">
-              {mess.map((mess) => <Chatplace mess={mess} />)}
+              {mess.map((mess) => <Chatplace key={mess.userName} mess={mess} />)}
               <div className="lastMessage" ref={lastMessage}></div>
             </div>
 

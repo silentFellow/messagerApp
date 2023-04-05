@@ -57,7 +57,7 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
           <h2 className='font-black'>USERS: </h2>
           {
             search == '' || search == null ? 
-            users.map((user) => <div onClick={() => {
+            users.map((user) => <div key={user.uid} onClick={() => {
               setActive(user.uid)
               setActiveUser(user.userName)
               if(user.uid > userName.uid) {
@@ -68,7 +68,7 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
               }
             }}><Chatcards username={user.userName} photoURL={user.photoURL} uid={user.uid} toggle={toggle} setToggle={setToggle} active={active} /></div> )
             :
-            users.filter(user => user.userName?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div onClick={() => {
+            users.filter(user => user.userName?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div key={user.uid} onClick={() => {
               setActive(user.uid)
               setActiveUser(user.userName)
               if(user.uid > userName.uid) {
@@ -82,18 +82,16 @@ const Sidebar = ({ toggle, setToggle, active, setActive, setTransmissionId, setA
 
           <h2 className="font-black mt-2 pt-2 border-t-2 border-dark">ROOMS: </h2>
           {search == '' || search == null ? 
-            rooms.map((user) => <div onClick={() => {
+            rooms.map((user) => <div key={user.transmissionId} onClick={() => {
               setActive(user.transmissionId)
               setActiveUser(user.name)
               setTransmissionId(user.transmissionId)
-              console.log(user)
             }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
             :
-            rooms.filter(room => room.name?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div onClick={() => {
+            rooms.filter(room => room.name?.toLowerCase().includes(search?.toLowerCase()))?.map((user) => <div key={user.transmissionId} onClick={() => {
               setActive(user.transmissionId)
               setActiveUser(user.name)
               setTransmissionId(user.transmissionId)
-              console.log(user)
             }}><Chatcards username={user.name} photoURL={user.photoURL} uid={user.transmissionId} toggle={toggle} setToggle={setToggle} active={active} /></div> )
           }
         </div>

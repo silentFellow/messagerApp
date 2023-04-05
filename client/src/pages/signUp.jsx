@@ -14,6 +14,7 @@ const SignUp = () => {
   const cPass = useRef();
 
   const { signUpEmail } = authContext()
+  const { userName } = authContext()
   const { signout } = authContext()
 
   const reset = () => {
@@ -22,7 +23,6 @@ const SignUp = () => {
     cPass.current.value = '';
     setMessage('')
   }
-  
 
   const create = async () => {
     if(pass.current.value != cPass.current.value) { 
@@ -41,6 +41,7 @@ const SignUp = () => {
       }
       catch(error) {
         setMessage('Something went wrong...')
+        console.log(error)
       }
       finally {
         setLoading(false)
