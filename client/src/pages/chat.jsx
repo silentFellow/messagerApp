@@ -73,6 +73,7 @@ const Chats = () => {
 
   useEffect(() => {
     const receiveMsg = async () => {
+      setMessage([])
       try {
         const res = await axios.get('/msg/receive', {
           params: {

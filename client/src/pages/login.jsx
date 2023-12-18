@@ -27,7 +27,7 @@ const Login = () => {
   const gooleSignIn = async () => {
     try {
       setMessage('')
-      await signInGoogle();
+      setTimeout(async () => await signInGoogle(), 333)
       await setDoc(doc(db, 'users', userName?.uid), {
         userName: userName?.displayName,
         uid: userName?.uid,
@@ -44,7 +44,7 @@ const Login = () => {
   const login = async () => {
     try {
       setMessage('')
-      await signInEmail(`${username.current.value}@gmail.com`, pass.current.value)
+      setTimeout(async () => await signInEmail(`${username.current.value}@gmail.com`, pass.current.value), 333)
       if(userName?.displayName == null) {
         await updateName(username.current.value)
       }

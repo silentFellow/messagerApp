@@ -8,7 +8,7 @@ const Chatplace = ({ mess }) => {
   const Uname = uname?.normalize()
   const username = mess.username
   const Username = username?.normalize()
-  
+
   return (
     <div className={`${Uname == Username ? "flex justify-end w-full" : "flex justify-start w-full"}`}>
       <div className="flex flex-col min-w-[25%] max-w-[60%] m-1">

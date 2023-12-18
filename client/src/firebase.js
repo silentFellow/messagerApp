@@ -4,13 +4,14 @@ import { getStorage } from 'firebase/storage'
 import { getFirestore } from '@firebase/firestore'
 
 const app = initializeApp({
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSENGER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyDOMiXGhVpUOQ_JNg5EsjpJ2DhxULWRa5U",
+  authDomain: "messengerapp-42955.firebaseapp.com",
+  databaseURL: "https://messengerapp-42955-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "messengerapp-42955",
+  storageBucket: "messengerapp-42955.appspot.com",
+  messagingSenderId: "660001933210",
+  appId: "1:660001933210:web:e9bbc3d499494d63925c23",
+  measurementId: "G-PMQQ9H7ZXB"
 })
 
 export const auth = getAuth(app);
